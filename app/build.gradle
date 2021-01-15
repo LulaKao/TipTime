@@ -6,6 +6,11 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.1"
 
+    // add this for view binding
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId "com.quarterlife.tiptime2"
         minSdkVersion 21
