@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         // prevent null values
         if(cost == null || cost == 0.0){
             displayTip(0.0)
-            return // 不會再繼續執行下去了
+            return // stop here
         }
 
         // get tip percentage
