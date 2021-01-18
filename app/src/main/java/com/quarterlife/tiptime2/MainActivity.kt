@@ -1,7 +1,6 @@
 package com.quarterlife.tiptime2
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.quarterlife.tiptime2.databinding.ActivityMainBinding
 import java.text.NumberFormat
@@ -9,7 +8,7 @@ import kotlin.math.ceil
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var binding: ActivityMainBinding // add this for view binding
+    private lateinit var binding: ActivityMainBinding // add this for view binding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,30 +21,38 @@ class MainActivity : AppCompatActivity() {
 
     // calculate tip
     private fun calculateTip() {
-        if(binding.costOfService.text.isEmpty()){
-            Toast.makeText(this, getString(R.string.toast_empty), Toast.LENGTH_SHORT).show()
-        } else {
-            // get cost of service in EditText, and convert it to double
-            val cost = binding.costOfService.text.toString().toDouble()
+        // get cost of service in EditText, and convert it to double
+        val cost = binding.costOfService.text.toString().toDoubleOrNull()
 
-            // get tip percentage
-            val tipPercentage = when (binding.tipOptions.checkedRadioButtonId) {
-                R.id.option_twenty_percent -> 0.20
-                R.id.option_eighteen_percent -> 0.18
-                else -> 0.15
-            }
-
-            // calculate the tip
-            var tip = tipPercentage * cost
-
-            // round up the tip if necessary
-            if(binding.roundUpSwitch.isChecked) tip = ceil(tip) // ceil : unconditional carry to integer
-
-            // format the tip
-            val formattedTip = NumberFormat.getCurrencyInstance().format(tip)
-
-            // display tip on the TextView
-            binding.tipResult.text = getString(R.string.tip_amount, formattedTip)
+        // prevent null values
+        if(cost == null || cost == 0.0){
+            displayTip(0.0)
+            return // 不會再繼續執行下去了
         }
+
+        // get tip percentage
+        val tipPercentage = when (binding.tipOptions.checkedRadioButtonId) {
+            R.id.option_twenty_percent -> 0.20
+            R.id.option_eighteen_percent -> 0.18
+            else -> 0.15
+        }
+
+        // calculate the tip
+        var tip = tipPercentage * cost
+
+        // round up the tip if necessary
+        if(binding.roundUpSwitch.isChecked) tip = ceil(tip) // ceil : unconditional carry to integer
+
+        // display the formatted tip value on screen
+        displayTip(tip)
+    }
+
+    // display the formatted tip value on screen
+    private fun displayTip(tip: Double) {
+        // format the tip
+        val formattedTip = NumberFormat.getCurrencyInstance().format(tip)
+
+        // display tip on the TextView
+        binding.tipResult.text = getString(R.string.tip_amount, formattedTip)
     }
 }
