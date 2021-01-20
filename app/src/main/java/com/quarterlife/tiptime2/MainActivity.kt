@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     // calculate tip
     private fun calculateTip() {
         // get cost of service in EditText, and convert it to double
-        val cost = binding.costOfService.text.toString().toDoubleOrNull()
+        val cost = binding.costOfServiceEditText.text.toString().toDoubleOrNull()
 
         // prevent null values
         if(cost == null || cost == 0.0){
